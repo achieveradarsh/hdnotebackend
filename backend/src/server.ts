@@ -1,24 +1,15 @@
 import dotenv from "dotenv"
 import path from "path"
 
-// Load environment variables FIRST - with explicit path
+// Load environment variables FIRST
 dotenv.config({ path: path.join(__dirname, "../.env") })
-
-// Debug environment loading
-console.log("🔍 Environment Loading Debug:")
-console.log("Current directory:", __dirname)
-console.log("Looking for .env at:", path.join(__dirname, "../.env"))
-console.log("EMAIL_USER loaded:", process.env.EMAIL_USER || "NOT LOADED")
-console.log("EMAIL_PASS loaded:", process.env.EMAIL_PASS ? "LOADED" : "NOT LOADED")
 
 import express from "express"
 import cors from "cors"
 import helmet from "helmet"
 import rateLimit from "express-rate-limit"
 import session from "express-session"
-import passport from "passport"
 import { connectDB } from "./config/database"
-import { setupPassport } from "./config/passport"
 import authRoutes from "./routes/auth"
 import noteRoutes from "./routes/notes"
 import userRoutes from "./routes/user"
@@ -29,9 +20,6 @@ const PORT = process.env.PORT || 5000
 
 // Connect to MongoDB
 connectDB()
-
-// Setup Passport
-setupPassport()
 
 // Security middleware
 app.use(helmet())
@@ -66,17 +54,13 @@ app.use(
   }),
 )
 
-// Passport middleware
-app.use(passport.initialize())
-app.use(passport.session())
-
 // Routes
 app.use("/api/auth", authRoutes)
 app.use("/api/notes", noteRoutes)
 app.use("/api/user", userRoutes)
 
 // Health check
-app.get("/api/health", (req, res) => {
+app.get("/api/health", (req: any, res: any) => {
   res.json({ status: "OK", message: "HD Notes API is running" })
 })
 
