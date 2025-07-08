@@ -21,31 +21,30 @@ const PORT = process.env.PORT || 5000
 // Connect to MongoDB
 connectDB()
 
-// CORS Configuration - FIXED for production
+// CORS Configuration - FIXED for your specific Vercel domain
 const allowedOrigins = [
   "http://localhost:3000",
   "https://localhost:3000",
+  "https://v0-notetakingapp10.vercel.app", // YOUR EXACT VERCEL DOMAIN
+  "https://hdnotes-notetakingapp10.vercel.app", // Alternative domain
   process.env.FRONTEND_URL,
-  "https://hd-notes-notetakingapp10.vercel.app", // Add your actual Vercel URL here
-  "https://*.vercel.app", // Allow all Vercel subdomains
 ]
 
 app.use(
   cors({
     origin: (origin, callback) => {
+      console.log("🔍 CORS Check - Origin:", origin)
+
       // Allow requests with no origin (mobile apps, curl, etc.)
       if (!origin) return callback(null, true)
 
-      // Check if origin is in allowed list or matches Vercel pattern
-      if (
-        allowedOrigins.some(
-          (allowed) => allowed === origin || (allowed && origin.includes("vercel.app")) || origin.includes("localhost"),
-        )
-      ) {
+      // Check if origin is in allowed list or is a Vercel domain
+      if (allowedOrigins.includes(origin) || origin.includes("vercel.app") || origin.includes("localhost")) {
+        console.log("✅ CORS ALLOWED for:", origin)
         return callback(null, true)
       }
 
-      console.log("CORS blocked origin:", origin)
+      console.log("❌ CORS BLOCKED for:", origin)
       callback(new Error("Not allowed by CORS"))
     },
     credentials: true,
@@ -54,7 +53,7 @@ app.use(
   }),
 )
 
-// Handle preflight requests
+// Handle preflight requests explicitly
 app.options("*", cors())
 
 // Security middleware
@@ -105,7 +104,7 @@ app.get("/api/health", (req: any, res: any) => {
   res.json({
     status: "OK",
     message: "HD Notes API is running",
-    cors: process.env.FRONTEND_URL,
+    allowedOrigins: allowedOrigins,
     timestamp: new Date().toISOString(),
   })
 })
@@ -115,7 +114,7 @@ app.get("/", (req: any, res: any) => {
   res.json({
     message: "HD Notes Backend API",
     health: "/api/health",
-    frontend: process.env.FRONTEND_URL,
+    allowedOrigins: allowedOrigins,
   })
 })
 
@@ -124,8 +123,8 @@ app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`📱 Frontend URL: ${process.env.FRONTEND_URL}`)
-  console.log(`🌍 CORS enabled for: ${allowedOrigins.join(", ")}`)
+  console.log(`📱 Allowed Origins: ${allowedOrigins.join(", ")}`)
+  console.log(`🌍 CORS enabled for Vercel domains`)
 })
 
 export default app
