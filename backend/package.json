@@ -22,9 +22,7 @@
     "express-session": "^1.17.3",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
-    "dotenv": "^16.3.1"
-  },
-  "devDependencies": {
+    "dotenv": "^16.3.1",
     "@types/express": "^4.17.21",
     "@types/node": "^20.8.7",
     "@types/bcryptjs": "^2.4.6",
