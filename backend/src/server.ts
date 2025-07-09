@@ -24,7 +24,7 @@ connectDB()
 // CORS Configuration - FIXED for your specific Vercel domain
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://localhost:3000",
+  "https://hdnotes.adarshvault.me",
   "https://v0-notetakingapp10.vercel.app", // YOUR EXACT VERCEL DOMAIN
   "https://hdnotes-notetakingapp10.vercel.app", // Alternative domain
   process.env.FRONTEND_URL,
