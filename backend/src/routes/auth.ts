@@ -235,7 +235,7 @@ router.post("/resend-otp", async (req: any, res: any) => {
   }
 })
 
-// 🔥 NEW: Google Firebase Auth (REAL IMPLEMENTATION)
+// 🔥 MAIN: Google Firebase Auth (REAL IMPLEMENTATION)
 router.post("/google-firebase", async (req: any, res: any) => {
   try {
     console.log("🔥 Google Firebase Auth Request:", req.body)
@@ -299,5 +299,9 @@ router.post("/google-firebase", async (req: any, res: any) => {
     res.status(500).json({ message: "Google authentication failed" })
   }
 })
+
+// 🗑️ REMOVED: Old Google OAuth routes (no longer needed)
+// router.get("/google", ...) - DELETED
+// router.get("/google/callback", ...) - DELETED
 
 export default router
